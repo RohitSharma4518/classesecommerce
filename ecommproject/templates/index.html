@@ -1,0 +1,60 @@
+{% include 'header.html' %}
+<title>Ekart|Home</title>
+<div class="container">
+    <div class="row">
+        {% if query %}
+        <center><h5>Search result for:<strong>{{query}}</strong></h5></center>
+        <center><h2>{{errmsg}}</h2></center>
+        {% endif %}
+
+        <div class="col-md-3 bg-light p-3">
+        <h5>Filter By Category</h5>
+            <p><a href="{% url 'mobilelistview' %}">By Mobile</a></p>
+            <p><a href="{% url 'clothslistview' %}">By Cloths</a></p>
+            <p><a href="{% url 'shoeslistview' %}">By Shoes</a></p>
+            <hr>
+            <h5>Filter By Price</h5>
+            <hr>
+            <form method="post" action="{% url 'range_view' %}">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <label class="form-label"><strong>Min:</strong></label>
+                    <input type="number"  class="form-control"  name="min" placeholder="Mininum Price">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label"><strong>Max:</strong></label>
+                    <input type="number" class="form-control"  name="max" placeholder="Maximum Price">
+                </div>
+                <div class="mb-2">
+                    <input type="submit" class="btn btn-danger" value="Search"> 
+                </div>
+            </form>
+            <h5 class="mt-3">Sort By Price</h5>
+            <hr>
+            <p><a href="{% url 'allsortedorderview' %}?sort=high_to_low">High to low</a></p>
+            <p><a href="{% url 'allsortedorderview' %}?sort=low_to_high">Low to High</a></p>
+        </div>
+
+        <div class="col-md-9 mt-4 bg-light p-3">
+            <div class="row">
+
+                {%  for item in allproducts %}
+                <div class="col-md-4 mb-4">
+                        <div class="card" style="width: 18rem;">
+                        <img src="{{item.image.url}}" class="card-img-top" alt="{{item.product_name}}" width="50px" height="150px">
+                        <div class="card-body">
+                          <h5 class="card-title">Product Name: {{item.product_name}}</h5>
+                          <p class="card-text">Product Details: {{item.desc}}</p>
+                          <p class="card-text">Price: {{item.price}}</p>
+                          <a href="/addtocart/{{item.product_id}}" class="btn btn-primary">Add to Cart</a>
+                          <a href="/addtocart/{{item.product_id}}" class="btn btn-primary">Buy Now</a>
+                        </div>
+                      </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
